@@ -7,7 +7,6 @@ import Mitigation from '../Mitigation';
 import History from '../History';
 
 
-
 class Dashboard extends Component {
 
     closeDashboard =()=> {

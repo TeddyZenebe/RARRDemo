@@ -107,7 +107,10 @@ nav,
 section {
     display: block;
 }
-
+strong {
+    font-size: 0.55rem;
+    font-style: italic;
+}
 
 
 ol,
@@ -149,15 +152,6 @@ code {
 .webmap {
     height: 100vh;
 }
-
-
-
-
-
-/*---------------------------------------*/
-/*         Landing nav styling              */
-/*---------------------------------------*/
-
 
 /*---------------------------------------*/
 /*         main nav styling              */
@@ -222,20 +216,21 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /*---------------------------------------*/
-/*           Legend styling              */
-/*---------------------------------------*/
-
-
-/*---------------------------------------*/
 /*           Dashboard styling           */
 /*---------------------------------------*/
+.container {
+ padding: 0 !important
+}
 .nav-item {
     color: #0000ff !important;
 }
+.MuiExpansionPanelSummary-root {
+    padding-left: 10% !important
+}
 .dashboardWrapper {
     padding-bottom: 10px;
-    max-width: 615px !important;
-    max-height: 90vh;
+    max-width: 650px !important;
+    max-height: 85vh;
     overflow-y: auto;
     text-align: center;
     position: absolute;
@@ -243,8 +238,8 @@ h1, h2, h3, h4, h5, h6 {
     top: 13vh;
     right: 20px;
     z-index: 1000;
-    background-color: #003366c4;
-    opacity: 1;
+    background-color: #4dd2ff;
+    opacity: 0.8;
     color: #fff;
     /*overflow-y: auto;*/
     --scrollbarBG: #fff;
@@ -261,46 +256,50 @@ h1, h2, h3, h4, h5, h6 {
 .dashboardTaps {
     font-family: CosmosLight;
     margin-top: 10px;
-    padding: 10px;
+    padding: 15px;
     border-bottom: 2px solid #3fa7cc;
     font-size: 20px;
     color: rgb(25, 37, 216);
 }
 .dashboardTitle {
     font-size: 1.2rem;
-    color: #ccffcc;
+    color: #000000;
 }
 
 /*---------------------------------------*/
 /*       General           */
 /*---------------------------------------*/
- .tblGeneral {
-     width: 400px;
-     padding: 2%;
-     color: #000000;
-     background: #ffffff;
- }
- .tblGeneral tr {
-    font-size: 1rem;
-    align-items: center;
-    text-align: center; 
- } 
+.header-title {
+    width: 400px;
+    height: 50px;
+    padding: 0.5%;
+    color: #000000;
+    background: #ffffff;
+    margin-bottom: 2%;
+    border: 1.8px solid #666666;
+}
 
- .tblGeneral th {
-     width: 58%;
-     font-size: 1rem;
-     text-align: left;
-     padding-left: 2%;
- } 
- 
- .tblGeneral td {
-    width: 42%;
+.header-title h6 {
+    font-weight: bold;
+    font-family: 'Oswald', sans-serif;
+}
+
+.header-title p {
     font-size: 0.8rem;
-    text-align:left;  
-    padding-right: 1%;
-  
-} 
+}
 
+.header-title-info {
+    width:350px;
+    height: 22px;
+    font-size: 1rem;
+    color: #000000;
+    background: #8c8c8c;
+}
+
+tbody, td, tr {
+    border: 1.4px solid #666666;
+    font-size: 0.8rem;
+}
 
 /*---------------------------------------*/
 /*       Risk          */
@@ -336,16 +335,4 @@ h1, h2, h3, h4, h5, h6 {
  width: 30%;
  border-radius: 60px;
 }
-/*---------------------------------------*/
-/*    Popup Template         */
-/*---------------------------------------*/
 
-
-/*---------------------------------------*/
-/*     Building Impact styling           */
-/*---------------------------------------*/
-
-
-/*---------------------------------------*/
-/*     Landing page styling              */
-/*---------------------------------------*/
