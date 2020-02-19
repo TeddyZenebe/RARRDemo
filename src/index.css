@@ -224,8 +224,17 @@ h1, h2, h3, h4, h5, h6 {
 .nav-item {
     color: #0000ff !important;
 }
+.MuiExpansionPanel-root {
+    width: 360px !important;
+}
+.MuiExpansionPanel-root.Mui-expanded {
+    width: 360px !important;
+}
+.MuiExpansionPanelDetails-root {
+    padding: 0 !important
+}
 .MuiExpansionPanelSummary-root {
-    padding-left: 10% !important
+    padding-left: 5% !important;
 }
 .dashboardWrapper {
     padding-bottom: 10px;

@@ -7,13 +7,13 @@ import { IoIosArrowDropdownCircle } from "react-icons/io";
 const General = (props) => {
     const useStyles = makeStyles({
         table: {
-            width: 350,
+            width: 360,
         },
         tableContainer: {
-            width: 350,
+            width: 360,
         },
         tableContainerLast: {
-            width: 350,
+            width: 360,
             marginBottom: '0'
         },
         tableCell: {
