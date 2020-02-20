@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Typography, Table, TableContainer, TableRow, TableCell, TableHead, Paper } from '@material-ui/core/';
 import { makeStyles } from '@material-ui/core/styles';
 import NumberFormat from 'react-number-format';
@@ -28,6 +28,7 @@ const General = (props) => {
             margin: 0,
         }
     });
+    const [expanded, setExpanded] = useState(true);
     const classes = useStyles();
     function titleCase(str) {
         str = str.toLowerCase().split(' ');
@@ -58,7 +59,9 @@ const General = (props) => {
             document.getElementById("complianceStatus").style.marginBottom = "2%";
         }
     }
-   
+    const expandTab = ()=> {
+        setExpanded(!expanded)
+    }
     useEffect(() => {
         changeBackground();
     });
@@ -71,8 +74,9 @@ const General = (props) => {
                     <p>(Parcel ID: {attributes.PID} {' '} | {' '} BldgID: {attributes.UnqBldgID})</p>
                 </div> 
                 {/*<div className="header-title-info">Locator Information</div>*/}
-                <ExpansionPanel className={classes.expantionPanel}>
+                <ExpansionPanel  expanded = {expanded} className={classes.expantionPanel} onClick={expandTab}>
                     <ExpansionPanelSummary
+
                         expandIcon={<IoIosArrowDropdownCircle />}
                         aria-controls="panel1a-content"
                         id="panel1a-header"
@@ -100,6 +104,33 @@ const General = (props) => {
                                 </TableRow>
                             </Table>
                         </TableContainer>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <ExpansionPanel  expanded = {expanded} className={classes.expantionPanel} onClick={expandTab}>
+                    <ExpansionPanelSummary
+                        expandIcon={<IoIosArrowDropdownCircle />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography className={classes.heading}>Compliance Status</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <TableContainer component={Paper} className={classes.tableContainerLast}>
+                            <Table className={classes.table} size="small" aria-label="a dense table">
+                                <TableRow hover='true'>
+                                    <TableCell className={classes.tableCell}>Flood Protection Elevation (FPE)</TableCell>
+                                    <TableCell align="center" className={classes.tableCell}>{FPE}</TableCell>
+                                </TableRow>
+                                <TableRow hover='true'>
+                                    <TableCell className={classes.tableCell}>Pre-/Post-FIRM</TableCell>
+                                    {attributes.YearBuilt > 1978 ?
+                                        <TableCell align="center" className={classes.tableCell}>Post-FIRM</TableCell> :
+                                        <TableCell align="center" className={classes.tableCell}>Pre-FIRM</TableCell>
+                                    }
+                                </TableRow>
+                            </Table>
+                            <div id="complianceStatus" className="header-title-info"></div>
+                        </TableContainer><br/>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
                     {/*<div className="header-title-info">Building Characteristics</div>*/}
@@ -245,35 +276,7 @@ const General = (props) => {
                     </ExpansionPanel>
              
                     {/*<div className="header-title-info">Compliance Status</div>*/}
-                    <ExpansionPanel className={classes.expantionPanel}>
-                        <ExpansionPanelSummary
-                            expandIcon={<IoIosArrowDropdownCircle />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                        >
-                            <Typography className={classes.heading}>Locator Information</Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                            <TableContainer component={Paper} className={classes.tableContainerLast}>
-                                <Table className={classes.table} size="small" aria-label="a dense table">
-                                    <TableRow hover='true'>
-                                        <TableCell className={classes.tableCell}>Flood Protection Elevation (FPE)</TableCell>
-                                        <TableCell align="center" className={classes.tableCell}>{FPE}</TableCell>
-                                    </TableRow>
-                                    <TableRow hover='true'>
-                                        <TableCell className={classes.tableCell}>Pre-/Post-FIRM</TableCell>
-                                        {attributes.YearBuilt > 1978 ?
-                                            <TableCell align="center" className={classes.tableCell}>Post-FIRM</TableCell> :
-                                            <TableCell align="center" className={classes.tableCell}>Pre-FIRM</TableCell>
-                                        }
-                                    </TableRow>
-                                </Table>
-                                <div id="complianceStatus" className="header-title-info"></div>
-                            </TableContainer><br/>
-                            
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
-                
+                                   
               </div>:
                 <h3>No building data available</h3>
             }

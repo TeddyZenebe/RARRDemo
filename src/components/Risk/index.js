@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Typography, Table, TableContainer, TableRow, TableCell, TableHead, Paper } from '@material-ui/core/';
 import { makeStyles } from '@material-ui/core/styles';
 import { IoIosArrowDropdownCircle} from "react-icons/io";
-import { MdCheckBox } from "react-icons/md";
+import { MdDone } from "react-icons/md";
 import Moment from 'react-moment';
 import 'moment-timezone';
 import { Doughnut } from 'react-chartjs-2';
@@ -35,7 +35,7 @@ const Risk = (props) => {
     const classes = useStyles();
     const attributes = props.graphics;
     const MultiFamilySurrounded = attributes.OccTypGen == 'Single Family Residential' ? `${attributes.RskDEvnt}-yr` : 'N/A'
-    const residualRisk = 0.65 * attributes.RskTotScr
+    const residualRisk = Math.round(0.65 * attributes.RskTotScr);
     function titleCase(str) {
         str = str.toLowerCase().split(' ');
         for (let i = 0; i < str.length; i++) {
@@ -176,15 +176,15 @@ const Risk = (props) => {
                                 <Table className={classes.table} size="small" aria-label="a dense table">
                                     <TableRow hover='true'>
                                         <TableCell className={classes.tableCell}>N: High-Velocity Zone</TableCell>
-                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskNMult == 1 ? <MdCheckBox /> : ''}</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskNMult > 1 ? <MdDone /> : ''}</TableCell>
                                         <TableCell className={classes.tableCell}>P: Drainage Overflow Zone</TableCell>
-                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskPMult == 1 ? <MdCheckBox /> : ''}</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskPMult > 1 ? <MdDone /> : ''}</TableCell>
                                     </TableRow>
                                     <TableRow hover='true'>
                                         <TableCell className={classes.tableCell}>O: Medium-Velocity Zone</TableCell>
-                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskOMult == 1 ? <MdCheckBox /> : ''}</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskOMult > 1 ? <MdDone /> : ''}</TableCell>
                                         <TableCell className={classes.tableCell}>Q: Community Encroachment Area</TableCell>
-                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskQMult == 1 ? <MdCheckBox /> : ''}</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskQMult > 1 ? <MdDone /> : ''}</TableCell>
                                     </TableRow>
                                 </Table>
                             </TableContainer>
