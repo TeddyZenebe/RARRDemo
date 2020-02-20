@@ -4,7 +4,7 @@ import '../../index.css';
 import { loadCss } from 'esri-loader';
 import Dashboard from '../../components/Dashboard';
 import Map from '../../components/Map';
-import navImage from '../../images/navTest.PNG'
+import Nav from '../../components/Nav';
 
 class Private extends Component {
 
@@ -33,7 +33,7 @@ class Private extends Component {
     render() {
         return (
             <div style={{ width: '100vw', height: '100vh' }}>
-                <img src={navImage} alt="TEST NAV FROM FIGMA" className="navWrapper"/>
+                <Nav />
                 <Map
                     setDashboard={this.setDashboard}
                     setGraphics ={this.setGraphics}
