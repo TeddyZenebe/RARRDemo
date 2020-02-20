@@ -1,12 +1,50 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Typography, Table, TableContainer, TableRow, TableCell, TableHead, Paper } from '@material-ui/core/';
+import { makeStyles } from '@material-ui/core/styles';
+import { IoIosArrowDropdownCircle} from "react-icons/io";
+import { MdCheckBox } from "react-icons/md";
 import Moment from 'react-moment';
 import 'moment-timezone';
 import { Doughnut } from 'react-chartjs-2';
 import riskChart from '../../images/riskChart.PNG'
 
 const Risk = (props) => {
-    const attributes = props.graphics
-    const HCFs = attributes.HCFs
+    const useStyles = makeStyles({
+        table: {
+            width: 360,
+        },
+        tableContainer: {
+            width: 360,
+        },
+        tableContainerLast: {
+            width: 360,
+            marginBottom: '0'
+        },
+        tableCell: {
+            lineHeight: 1,
+            fontSize: '0.8rem'
+        },
+        expantionPanel: {
+            padding: 0,
+            textAlign: 'center',
+        },
+        heading: {
+            margin: 0,
+        }
+    });
+    const classes = useStyles();
+    const attributes = props.graphics;
+    const MultiFamilySurrounded = attributes.OccTypGen == 'Single Family Residential' ? `${attributes.RskDEvnt}-yr` : 'N/A'
+    const residualRisk = 0.65 * attributes.RskTotScr
+    function titleCase(str) {
+        str = str.toLowerCase().split(' ');
+        for (let i = 0; i < str.length; i++) {
+            str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+        }
+        return str.join(' ');
+    }
+    const Address = titleCase(attributes.Address);
+    const HCFs = attributes.HCFs;
     const str2obj = str => {
         return str
             .split(';')
@@ -28,7 +66,7 @@ const Risk = (props) => {
         fullWidth: true,
         reverse: false,
         labels: {
-            fontColor: '#ffffff'
+            fontColor: '#000000'
         }
     };
     const data = {
@@ -38,95 +76,132 @@ const Risk = (props) => {
         }],
         labels: Object.keys(HCFobj)
     };
-
+    const changeBackground = () => {
+        if (attributes.RskTotScr < 5) {
+            document.getElementById("riskScore").style.backgroundColor = "#ccff99";
+        } else if (attributes.RskTotScr >= 5 && attributes.RskTotScr < 100) {
+            document.getElementById("riskScore").style.backgroundColor = "#66e0ff";
+        } else if (attributes.RskTotScr >= 100 && attributes.RskTotScr < 500){
+            document.getElementById("riskScore").style.backgroundColor = "#ffff33";
+        } else if (attributes.RskTotScr >= 500 && attributes.RskTotScr < 1000){
+            document.getElementById("riskScore").style.backgroundColor = "#ff8533";
+        } else {
+            document.getElementById("riskScore").style.backgroundColor = "#ff3333";
+        }
+    }
+    useEffect(() => {
+        changeBackground();
+    });
     return (
         <div className="dashboardTaps">
             {attributes.RskTotScr >= 0 ?
                 <div>
-                    <table className="tblRisk">
-                        <tbody>
-                            <tr>
-                                <th>Risk Total Score</th>
-                                <td>{attributes.RskTotScr}</td>
-                            </tr>
-                            <tr>
-                                <th>Name for RARR Simulation</th>
-                                <td>{attributes.RunName}</td>
-                            </tr>
-                            <tr>
-                                <th>Date and Time of RARR Run</th>
-                                <td><Moment format="MM/DD/YY HH:mm" >{attributes.RunDteTime}</Moment></td>
-                            </tr>
-                            <tr>
-                                <th>Min Event Flooding Above FFE</th>
-                                <td>{attributes.RskAEvnt}</td>
-                            </tr>
-                            <tr>
-                                <th>Min Event Flooding of LME</th>
-                                <td>{attributes.RskBEvnt}</td>
-                            </tr>
-                            <tr>
-                                <th>Min Event Flooding of LAG</th>
-                                <td>{attributes.RskCEvnt}</td>
-                            </tr>
-                            <tr>
-                                <th>Min Event flood Surrounding the Property</th>
-                                <td>{attributes.RskDEvnt}</td>
-                            </tr>
-                            <tr>
-                                <th>Min Event flood Surrounding the Building</th>
-                                <td>{attributes.RskEEvnt}</td>
-                            </tr>
-                            <tr>
-                                <th>Min Event Flood Surrounding Critical Facility</th>
-                                <td>{attributes.RskFEvnt}</td>
-                            </tr>
-                            <tr>
-                                <th>Min Event Flood Water Touching Damaged Structure</th>
-                                <td>{attributes.RskIEvnt} </td>
-                            </tr>
-                            <tr>
-                                <th>Min Event Flooding Unattached Improvement Significantly</th>
-                                <td>{attributes.RskJEvnt}</td>
-                            </tr>
-                            <tr>
-                                <th>Min Event Flooding Unattached Improvement Moderately</th>
-                                <td>{attributes.RskKEvnt}</td>
-                            </tr>
-                            <tr>
-                                <th>Min Event Flood Surrounding the Parking</th>
-                                <td>{attributes.RskLEvnt}</td>
-                            </tr>
-                            <tr>
-                                <th>Min event flooding the yard</th>
-                                <td>{attributes.RskMEvnt}</td>
-                            </tr>
-                            <tr>
-                                <th>High Danger Depth-velocity Zone Location Multiplier</th>
-                                <td>{attributes.RskNMult}</td>
-                            </tr>
-                            <tr>
-                                <th>Medium Danger Depth-velocity Zone Location Multiplier</th>
-                                <td>{attributes.RskOMult}</td>
-                            </tr>
-                            <tr>
-                                <th>Impacted by Frequent Storm drainage overflows Location Multiplier</th>
-                                <td>{attributes.RskPMult}</td>
-                            </tr>
-                            <tr>
-                                <th>Community Encroachment Location Multiplier</th>
-                                <td>{attributes.RskQMult}</td>
-                            </tr>
-                            <tr>
-                                <th>Overall Risk Location Multiplier</th>
-                                <td>{attributes.RskLocMult}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <h6 style={{ color: '#ffffff' }}>Highest Contributing Risk Components (%)</h6>
-                    {attributes.RskTotScr === 0 ? <img src={riskChart} alt="No Risk Found for this Building" className="riskChart"/> :
-                    <Doughnut legend={legend} data={data} />
-                    }   
+                    <div className="header-title">
+                        <h6>{Address}</h6>
+                        <p>(Parcel ID: {attributes.PID} {' '} | {' '} BldgID: {attributes.UnqBldgID})</p>
+                    </div> 
+                    <ExpansionPanel className={classes.expantionPanel}>
+                        <ExpansionPanelSummary
+                            expandIcon={<IoIosArrowDropdownCircle />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                        >
+                            <Typography className={classes.heading}>Risk Component Trigger Storm Event</Typography>
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails>
+                            <TableContainer component={Paper} className={classes.tableContainer}>
+                                <Table className={classes.table} size="small" aria-label="a dense table">
+                                    <TableRow hover='true'>
+                                        <TableCell className={classes.tableCell}>A: FFE Flooding</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskAEvnt > 0 ? `${attributes.RskAEvnt}-yr` :'N/A' }</TableCell>
+                                    </TableRow>
+                                    <TableRow hover='true'>
+                                        <TableCell className={classes.tableCell}>B: LME Flooding</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskBEvnt > 0 ? `${attributes.RskBEvnt}-yr` : 'N/A'}</TableCell>
+                                    </TableRow>
+                                    <TableRow hover='true'>
+                                        <TableCell className={classes.tableCell}>C: LAG Flooding</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskCEvnt > 0 ? `${attributes.RskCEvnt}-yr` : 'N/A'}</TableCell>
+                                    </TableRow>
+                                    <TableRow hover='true'>
+                                        <TableCell className={classes.tableCell}>D: Property Surrounded</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskDEvnt > 0 ? `${attributes.RskDEvnt}-yr` : 'N/A'}</TableCell>
+                                    </TableRow>
+                                    <TableRow hover='true'>
+                                        <TableCell className={classes.tableCell}>E: Building Surrounded</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskEEvnt > 0 ? `${attributes.RskEEvnt}-yr` : 'N/A'}</TableCell>
+                                    </TableRow>
+                                    <TableRow hover='true'>
+                                        <TableCell className={classes.tableCell}>F: Critical Fasility Surrounded</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskFEvnt > 0 ? `${attributes.RskFEvnt}-yr` : 'N/A'}</TableCell>
+                                    </TableRow>
+                                    <TableRow hover='true'>
+                                        <TableCell className={classes.tableCell}>G: Multi-Family Surrounded</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{MultiFamilySurrounded}</TableCell>
+                                    </TableRow>
+                                    <TableRow hover='true'>
+                                        <TableCell className={classes.tableCell}>I: Potential Structural Damage</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskIEvnt > 0 ? `${attributes.RskIEvnt}-yr` : 'N/A'}</TableCell>
+                                    </TableRow>
+                                    <TableRow hover='true'>
+                                        <TableCell className={classes.tableCell}>J: Significant Improvements Flooding</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskJEvnt > 0 ? `${attributes.RskJEvnt}-yr` : 'N/A'}</TableCell>
+                                    </TableRow>
+                                    <TableRow hover='true'>
+                                        <TableCell className={classes.tableCell}>K: Moderate Improvements Flooding</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskKEvnt > 0 ? `${attributes.RskKEvnt}-yr` : 'N/A'}</TableCell>
+                                    </TableRow>
+                                    <TableRow hover='true'>
+                                        <TableCell className={classes.tableCell}>L: Vehicle Flooding</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskLEvnt > 0 ? `${attributes.RskLEvnt}-yr` : 'N/A'}</TableCell>
+                                    </TableRow>
+                                    <TableRow hover='true'>
+                                        <TableCell className={classes.tableCell}>M: Yard Flooding</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskMEvnt > 0 ? `${attributes.RskMEvnt}-yr` : 'N/A'}</TableCell>
+                                    </TableRow>
+                                </Table>
+                            </TableContainer>
+                        </ExpansionPanelDetails>
+                    </ExpansionPanel>
+                    <ExpansionPanel className={classes.expantionPanel}>
+                        <ExpansionPanelSummary
+                            expandIcon={<IoIosArrowDropdownCircle />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                        >
+                            <Typography className={classes.heading}>Location in Risk Zone</Typography>
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails>
+                            <TableContainer component={Paper} className={classes.tableContainer}>
+                                <Table className={classes.table} size="small" aria-label="a dense table">
+                                    <TableRow hover='true'>
+                                        <TableCell className={classes.tableCell}>N: High-Velocity Zone</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskNMult == 1 ? <MdCheckBox /> : ''}</TableCell>
+                                        <TableCell className={classes.tableCell}>P: Drainage Overflow Zone</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskPMult == 1 ? <MdCheckBox /> : ''}</TableCell>
+                                    </TableRow>
+                                    <TableRow hover='true'>
+                                        <TableCell className={classes.tableCell}>O: Medium-Velocity Zone</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskOMult == 1 ? <MdCheckBox /> : ''}</TableCell>
+                                        <TableCell className={classes.tableCell}>Q: Community Encroachment Area</TableCell>
+                                        <TableCell align="center" className={classes.tableCell}>{attributes.RskQMult == 1 ? <MdCheckBox /> : ''}</TableCell>
+                                    </TableRow>
+                                </Table>
+                            </TableContainer>
+                        </ExpansionPanelDetails>
+                    </ExpansionPanel>
+                    <div className="risk-calculated-date">
+                        <h6>Current Calcualated Risk</h6>
+                        <p> {attributes.RunName} {' '} | {' '} <Moment format="MM/DD/YY HH:mm" >{attributes.RunDteTime}</Moment></p>
+                    </div> 
+                    <div id="riskScore" className="riskScore-value">Risk Score: {attributes.RskTotScr}</div>
+                    <div className="chart">
+                        <h6>Highest Contributing Risk Components (%)</h6>
+                        {attributes.RskTotScr === 0 ? <img src={riskChart} alt="No Risk Found for this Building" className="riskChart-img" /> :
+                            <Doughnut legend={legend} data={data} />
+                        }   
+                    </div>
+                    <div className='residualRisk'>In-Place Mitigation Residual Risk : {residualRisk} </div>   
                 </div> :
                 <h4>No Risk Analysis Data Available </h4>
             }
