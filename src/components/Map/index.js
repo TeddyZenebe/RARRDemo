@@ -50,11 +50,7 @@ class Map extends Component {
                     title: "RARR Basemap ",
                     id: "RARR Basemap"
                 });
-                // var layer = new ImageryLayer({
-                //     url:
-                //       "https://espwebapps.com/arcgis/rest/services/RARR/rD100yrFU/ImageServer",
-                    
-                //   });
+                
                 const map = new Map({
                     basemap: defaultBasemap,
                     //layers: [layer]
@@ -115,7 +111,14 @@ class Map extends Component {
                     pixelData.pixelBlock.pixels = [rBand, gBand, bBand];
                     pixelData.pixelBlock.pixelType = "U8"; // U8 is used for color
                 }
-               
+                const rasterLayer = new ImageryLayer({
+                    
+                    url: Data.rasterUrl,
+                    pixelFilter: colorizeRaster,
+                    opacity: 0.5,
+                    id: "rasterInundation",
+                });
+                map.add(rasterLayer, 0)
                 const RARRBuildingsLayer = new FeatureLayer({
                     url: Data.rarrBuildingUrl,
                     visible: true,
@@ -124,7 +127,7 @@ class Map extends Component {
                 });
                 const inundationLayer = new FeatureLayer({
                     url: Data.futureFldPlnUrl,
-                    visible: true,
+                    visible: false,
                     outFields: ["*"],
                     opacity: 1
                 });
@@ -175,7 +178,7 @@ class Map extends Component {
                             title: "Risk Score"
                         },
                         {
-                            layer: inundationLayer,
+                            layer: rasterLayer,
                             title: "100-yr Future Floodplain"
                         }
                     ]
