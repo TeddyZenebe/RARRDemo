@@ -28,7 +28,8 @@ const General = (props) => {
             margin: 0,
         }
     });
-    const [expanded, setExpanded] = useState(true);
+    const [expandedLocation, setExpandedLocation] = useState(true);
+    const [expandedCompliance, setExpandedCompliance] = useState(true);
     const classes = useStyles();
     function titleCase(str) {
         str = str.toLowerCase().split(' ');
@@ -59,8 +60,11 @@ const General = (props) => {
             document.getElementById("complianceStatus").style.marginBottom = "2%";
         }
     }
-    const expandTab = ()=> {
-        setExpanded(!expanded)
+    const expandedLocationTab = () => {
+        setExpandedLocation(!expandedLocation)
+    }
+    const expandedComplianceTab = () => {
+        setExpandedCompliance(!expandedCompliance)
     }
     useEffect(() => {
         changeBackground();
@@ -74,7 +78,7 @@ const General = (props) => {
                     <p>(Parcel ID: {attributes.PID} {' '} | {' '} BldgID: {attributes.UnqBldgID})</p>
                 </div> 
                 {/*<div className="header-title-info">Locator Information</div>*/}
-                <ExpansionPanel  expanded = {expanded} className={classes.expantionPanel} onClick={expandTab}>
+                <ExpansionPanel expanded={expandedLocation} className={classes.expantionPanel} onClick={expandedLocationTab}>
                     <ExpansionPanelSummary
 
                         expandIcon={<IoIosArrowDropdownCircle />}
@@ -106,7 +110,7 @@ const General = (props) => {
                         </TableContainer>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
-                <ExpansionPanel  expanded = {expanded} className={classes.expantionPanel} onClick={expandTab}>
+                <ExpansionPanel  expanded={expandedCompliance} className={classes.expantionPanel} onClick={expandedComplianceTab}>
                     <ExpansionPanelSummary
                         expandIcon={<IoIosArrowDropdownCircle />}
                         aria-controls="panel1a-content"
