@@ -32,8 +32,8 @@ class Map extends Component {
     // function to init/load map.  This is called when component mounts
     // map is only ever rendered once
     loadMap() {
-        return loadModules(['esri/Map', 'esri/views/MapView', 'esri/Basemap', 'esri/widgets/BasemapGallery', "esri/widgets/BasemapToggle", 'esri/widgets/Search', 'esri/widgets/Home', 'esri/widgets/Expand', 'esri/layers/TileLayer', 'esri/layers/FeatureLayer', "esri/widgets/Legend", "esri/widgets/DistanceMeasurement2D", "esri/layers/ImageryLayer", "esri/layers/support/RasterFunction", "esri/widgets/Measurement"])
-            .then(([Map, MapView, Basemap, BasemapGallery, BasemapToggle, Search, Home, Expand, TileLayer, FeatureLayer, Slider, Legend, DistanceMeasurement2D, ImageryLayer, RasterFunction, Measurement]) => {
+        return loadModules(['esri/Map', 'esri/views/MapView', 'esri/Basemap', 'esri/widgets/BasemapGallery', "esri/widgets/BasemapToggle", 'esri/widgets/Search', 'esri/widgets/Home', 'esri/widgets/Expand', 'esri/layers/TileLayer', 'esri/layers/FeatureLayer', "esri/widgets/Legend", "esri/layers/ImageryLayer"])
+            .then(([Map, MapView, Basemap, BasemapGallery, BasemapToggle, Search, Home, Expand, TileLayer, FeatureLayer,  Legend,  ImageryLayer]) => {
                 
                 const topomap = new TileLayer({
                     url: Data.mapUrl,
@@ -173,6 +173,10 @@ class Map extends Component {
                         {
                             layer: RARRBuildingsLayer,
                             title: "Risk Score"
+                        },
+                        {
+                            layer: inundationLayer,
+                            title: "Inundation"
                         }
                     ]
                 });
@@ -195,8 +199,11 @@ class Map extends Component {
     
                     const graphic = respose.results[0].graphic;
                     const attributes = graphic.attributes;
-                    this.props.setGraphics(attributes)
-                    this.props.setDashboard("open");
+                    if(attributes.UnqBldgID) {
+                        this.props.setGraphics(attributes)
+                        this.props.setDashboard("open");
+                    }
+                    
                 }
                          
                 // return () => {
