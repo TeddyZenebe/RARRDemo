@@ -30,6 +30,7 @@ const Risk = (props) => {
         },
         heading: {
             margin: 0,
+            fontWeight: 900
         }
     });
     const classes = useStyles();

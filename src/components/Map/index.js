@@ -32,7 +32,7 @@ class Map extends Component {
     // function to init/load map.  This is called when component mounts
     // map is only ever rendered once
     loadMap() {
-        return loadModules(['esri/Map', 'esri/views/MapView', 'esri/Basemap', 'esri/widgets/BasemapGallery', "esri/widgets/BasemapToggle", 'esri/widgets/Search', 'esri/widgets/Home', 'esri/widgets/Expand', 'esri/layers/TileLayer', 'esri/layers/FeatureLayer', 'esri/widgets/Slider', "esri/widgets/Legend", "esri/widgets/DistanceMeasurement2D", "esri/layers/ImageryLayer", "esri/layers/support/RasterFunction", "esri/widgets/Measurement"])
+        return loadModules(['esri/Map', 'esri/views/MapView', 'esri/Basemap', 'esri/widgets/BasemapGallery', "esri/widgets/BasemapToggle", 'esri/widgets/Search', 'esri/widgets/Home', 'esri/widgets/Expand', 'esri/layers/TileLayer', 'esri/layers/FeatureLayer', "esri/widgets/Legend", "esri/widgets/DistanceMeasurement2D", "esri/layers/ImageryLayer", "esri/layers/support/RasterFunction", "esri/widgets/Measurement"])
             .then(([Map, MapView, Basemap, BasemapGallery, BasemapToggle, Search, Home, Expand, TileLayer, FeatureLayer, Slider, Legend, DistanceMeasurement2D, ImageryLayer, RasterFunction, Measurement]) => {
                 
                 const topomap = new TileLayer({
@@ -50,9 +50,14 @@ class Map extends Component {
                     title: "RARR Basemap ",
                     id: "RARR Basemap"
                 });
-
+                // var layer = new ImageryLayer({
+                //     url:
+                //       "https://espwebapps.com/arcgis/rest/services/RARR/rD100yrFU/ImageServer",
+                    
+                //   });
                 const map = new Map({
-                    basemap: defaultBasemap
+                    basemap: defaultBasemap,
+                    //layers: [layer]
                 });
                 
                 const view = new MapView({
@@ -70,7 +75,46 @@ class Map extends Component {
                     //     }
                     // }
                 });
+                // raster colorize function
+                function colorizeRaster(pixelData) {
+                  
+                    if (
+                        pixelData === null ||
+                        pixelData.pixelBlock === null ||
+                        pixelData.pixelBlock.pixels === null
+                    ) {
+                        return;
+                    }
 
+                    // The pixelBlock stores the values of all pixels visible in the view
+                    const pixelBlock = pixelData.pixelBlock;
+
+                    // Get the min and max values of the data in the current view
+                    const minValue = pixelBlock.statistics[0].minValue;
+                    const maxValue = pixelBlock.statistics[0].maxValue;
+                    const pixels = pixelBlock.pixels;
+               
+                    // The number of pixels in the pixelBlock
+                    const numPixels = pixelBlock.width * pixelBlock.height;
+                                   
+                    const factor = 255.0 / (maxValue - minValue);
+                    
+                    const depthBand = pixels[0];
+                    let rBand = [];
+                    let gBand = [];
+                    let bBand = [];
+
+                    for (let i = 0; i < numPixels; i++) {
+                        let depthValue = depthBand[i];
+                        let green = (maxValue - depthValue)* factor ;
+                        rBand[i] = green * 0.75;
+                        gBand[i] = green;
+                        bBand[i] = 255;
+                    }
+
+                    pixelData.pixelBlock.pixels = [rBand, gBand, bBand];
+                    pixelData.pixelBlock.pixelType = "U8"; // U8 is used for color
+                }
                
                 const RARRBuildingsLayer = new FeatureLayer({
                     url: Data.rarrBuildingUrl,
@@ -78,8 +122,14 @@ class Map extends Component {
                     outFields: ["*"],
                     id: "rarrbuildingsLayer"
                 });
+                const inundationLayer = new FeatureLayer({
+                    url: Data.futureFldPlnUrl,
+                    visible: true,
+                    outFields: ["*"],
+                    opacity: 1
+                });
                 map.add(RARRBuildingsLayer);
-
+                map.add(inundationLayer, 0)
                 const search = new Search({
                     view: view,
                     container: document.createElement("div")

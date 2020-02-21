@@ -26,6 +26,7 @@ const General = (props) => {
         },
         heading: {
             margin: 0,
+            fontWeight:900
         }
     });
     const [expandedLocation, setExpandedLocation] = useState(true);
