@@ -190,7 +190,7 @@ const General = (props) => {
                             aria-controls="panel1a-content"
                             id="panel1a-header"
                         >
-                            <Typography className={classes.heading}>Building Elivation Information <strong>(ft NAVD)</strong></Typography>
+                            <Typography className={classes.heading}>Building Elevation Information <strong>(ft NAVD)</strong></Typography>
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                             <TableContainer component={Paper} className={classes.tableContainer}>

@@ -176,7 +176,7 @@ class Map extends Component {
                         },
                         {
                             layer: inundationLayer,
-                            title: "Inundation"
+                            title: "100-yr Future Floodplain"
                         }
                     ]
                 });
