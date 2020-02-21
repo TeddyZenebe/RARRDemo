@@ -445,3 +445,9 @@ tbody, td, tr {
     margin-bottom: 2%;
     border: 1.8px solid #666666;
 }
+ /*---------------------------------------*/
+    /*       PopUp template        */
+    /*---------------------------------------*/
+.esri-view-width-xlarge .esri-popup__main-container {
+    width: 150px !important;
+}

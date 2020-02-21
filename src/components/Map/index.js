@@ -197,7 +197,11 @@ class Map extends Component {
                         .then(getGraphics)
     
                 });
-    
+                view.popup.dockOptions = {
+                    buttonEnabled: false
+               };
+   
+               view.popup.collapseEnabled = false;
                 const getGraphics = (respose) => {
     
                     const graphic = respose.results[0].graphic;
@@ -208,7 +212,7 @@ class Map extends Component {
                     }else {
                         var InundationLayerTemplate = {
                             title: "Flood Depth (ft)",
-                            content: "<div class='inundationPopup-depth'>{Raster.ServicePixelValue}</div>"
+                            content: "<div >{Raster.ServicePixelValue}</div>"
                         };
                        
                         rasterLayer.popupTemplate = InundationLayerTemplate;
