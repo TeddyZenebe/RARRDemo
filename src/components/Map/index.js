@@ -205,6 +205,16 @@ class Map extends Component {
                     if(attributes.UnqBldgID) {
                         this.props.setGraphics(attributes)
                         this.props.setDashboard("open");
+                    }else {
+                        var InundationLayerTemplate = {
+                            title: "Flood Depth (ft)",
+                            content: "<div class='inundationPopup-depth'>{Raster.ServicePixelValue}</div>"
+                        };
+                       
+                        rasterLayer.popupTemplate = InundationLayerTemplate;
+                        rasterLayer.popupTemplate.overwriteActions = true;
+                        rasterLayer.popupTemplate.actions = [];
+                        rasterLayer.popupEnabled = true;
                     }
                     
                 }
