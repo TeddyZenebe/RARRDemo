@@ -35,7 +35,7 @@ const Risk = (props) => {
     });
     const classes = useStyles();
     const attributes = props.graphics;
-    const MultiFamilySurrounded = attributes.OccTypGen == 'Single Family Residential' ? `${attributes.RskDEvnt}-yr` : 'N/A'
+    const MultiFamilySurrounded = (attributes.OccTypGen == 'Single Family Residential' && attributes.RskDEvnt > 0) ? `${attributes.RskDEvnt}-yr` : 'N/A'
     const residualRisk = Math.round(0.65 * attributes.RskTotScr);
     function titleCase(str) {
         str = str.toLowerCase().split(' ');
