@@ -137,7 +137,7 @@ const Risk = (props) => {
                                         <TableCell align="center" className={classes.tableCell}>{attributes.RskFEvnt > 0 ? `${attributes.RskFEvnt}-yr` : 'N/A'}</TableCell>
                                     </TableRow>
                                     <TableRow hover='true'>
-                                        <TableCell className={classes.tableCell}>G: Multi-Family Surrounded</TableCell>
+                                        <TableCell className={classes.tableCell}>G/H: Multi-Family Surrounded</TableCell>
                                         <TableCell align="center" className={classes.tableCell}>{MultiFamilySurrounded}</TableCell>
                                     </TableRow>
                                     <TableRow hover='true'>

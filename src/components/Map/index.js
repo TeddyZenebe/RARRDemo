@@ -32,8 +32,8 @@ class Map extends Component {
     // function to init/load map.  This is called when component mounts
     // map is only ever rendered once
     loadMap() {
-        return loadModules(['esri/Map', 'esri/views/MapView', 'esri/Basemap', 'esri/widgets/BasemapGallery', "esri/widgets/BasemapToggle", 'esri/widgets/Search', 'esri/widgets/Home', 'esri/widgets/Expand', 'esri/layers/TileLayer', 'esri/layers/FeatureLayer', "esri/widgets/Legend", "esri/layers/ImageryLayer"])
-            .then(([Map, MapView, Basemap, BasemapGallery, BasemapToggle, Search, Home, Expand, TileLayer, FeatureLayer,  Legend,  ImageryLayer]) => {
+        return loadModules(['esri/Map', 'esri/views/MapView', 'esri/Basemap', 'esri/widgets/BasemapGallery', "esri/widgets/BasemapToggle", 'esri/widgets/Search', 'esri/widgets/Home', 'esri/widgets/Expand', 'esri/layers/TileLayer', 'esri/layers/FeatureLayer', "esri/widgets/Legend", "esri/layers/ImageryLayer", "esri/Color", "esri/Graphic", "esri/symbols/SimpleLineSymbol", "esri/symbols/SimpleFillSymbol"])
+            .then(([Map, MapView, Basemap, BasemapGallery, BasemapToggle, Search, Home, Expand, TileLayer, FeatureLayer,  Legend,  ImageryLayer, Color, Graphic, SimpleLineSymbol, SimpleFillSymbol]) => {
                 
                 const topomap = new TileLayer({
                     url: Data.mapUrl,
@@ -203,19 +203,33 @@ class Map extends Component {
    
                view.popup.collapseEnabled = false;
                 const getGraphics = (respose) => {
-    
-                    const graphic = respose.results[0].graphic;
-                    const attributes = graphic.attributes;
-                    if(attributes.UnqBldgID) {
+                    const graphics = respose.results[0].graphic;
+                    const attributes = graphics.attributes;
+                    const geometry = graphics.geometry;
+                    console.log("graphics", graphics)
+                    console.log("attribut", attributes)
+                    console.log("geometry", geometry)
+                    if (attributes.UnqBldgID) {
+                       
+                        if (geometry.type === "polygon") {
+                            const symbol = new SimpleFillSymbol(
+                                "solid",
+                                new SimpleLineSymbol("solid", new Color([0, 255, 255]), 2),
+                                new Color([0, 255, 255, 0.25])
+                            );
+                            const graphic = new Graphic(geometry, symbol);
+                            view.graphics.removeAll(); 
+                            view.graphics.add(graphic);
+                        }
                         this.props.setGraphics(attributes)
                         this.props.setDashboard("open");
                         rasterLayer.popupEnabled = false;
-                    }else {
+                    } else {
                         var InundationLayerTemplate = {
                             title: "Flood Depth (ft)",
                             content: "<div >{Raster.ServicePixelValue}</div>"
                         };
-                       
+
                         rasterLayer.popupTemplate = InundationLayerTemplate;
                         rasterLayer.popupTemplate.overwriteActions = true;
                         rasterLayer.popupTemplate.actions = [];
